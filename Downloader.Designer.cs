@@ -40,6 +40,7 @@
             this.btnPickFile = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.comboEnvironment = new System.Windows.Forms.ComboBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -62,6 +63,7 @@
             this.txtFileName.Name = "txtFileName";
             this.txtFileName.Size = new System.Drawing.Size(234, 22);
             this.txtFileName.TabIndex = 1;
+            this.txtFileName.TextChanged += new System.EventHandler(this.txtFileName_TextChanged);
             // 
             // label1
             // 
@@ -145,11 +147,22 @@
             this.comboEnvironment.Size = new System.Drawing.Size(229, 21);
             this.comboEnvironment.TabIndex = 9;
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(220, 159);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(50, 28);
+            this.button2.TabIndex = 10;
+            this.button2.Text = "Open";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // Downloader
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(279, 268);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.comboEnvironment);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btnPickFile);
@@ -183,6 +196,7 @@
         private System.Windows.Forms.Button btnPickFile;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboEnvironment;
+        private System.Windows.Forms.Button button2;
     }
 }
 

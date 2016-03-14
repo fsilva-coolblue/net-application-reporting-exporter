@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
@@ -13,7 +14,27 @@ namespace ApplicationReportingDataDownloader
         private const string ACCEPTANCE_ENVIRONMENT = "Acceptance";
         private const string PRODUCTION_ENVIRONMENT = "Production";
 
+        private string FileName
+        {
+            get
+            {
+                string fileName = _fileName;
+
+                if(string.IsNullOrWhiteSpace(fileName))
+                    fileName = DEFAULT_FILENAME;
+
+                return fileName;
+            }
+
+            set
+            {
+                _fileName = value;
+            }
+        }
+
         private ReportingEventsExporter _acceptanceExporter;
+
+        private string _fileName = string.Empty;
         private ReportingEventsExporter _productionExporter;
 
         public Downloader()
@@ -24,10 +45,10 @@ namespace ApplicationReportingDataDownloader
         private void Downloader_Load(object sender, EventArgs e)
         {
             comboEnvironment.DataSource = new List<string>
-                                     {
-                                         ACCEPTANCE_ENVIRONMENT,
-                                         PRODUCTION_ENVIRONMENT
-                                     };
+                                          {
+                                              ACCEPTANCE_ENVIRONMENT,
+                                              PRODUCTION_ENVIRONMENT
+                                          };
 
             _acceptanceExporter =
                 new ReportingEventsExporter(
@@ -44,15 +65,8 @@ namespace ApplicationReportingDataDownloader
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var fileName = txtFileName.Text;
-
-            if(string.IsNullOrWhiteSpace(fileName))
-                fileName = DEFAULT_FILENAME;
-            else if(Directory.Exists(fileName))
-                fileName = Path.Combine(fileName, DEFAULT_FILENAME);
-
             var fromDate = fromDatePicker.Value.Date;
-            var toDate = fromDatePicker.Value.Date.AddDays(1);
+            var toDate = toDatePicker.Value.Date.AddDays(1);
 
             ReportingEventsExporter exporter;
 
@@ -61,7 +75,7 @@ namespace ApplicationReportingDataDownloader
             else
                 exporter = _acceptanceExporter;
 
-            ExportResult result = exporter.Export(fromDate, toDate, fileName);
+            ExportResult result = exporter.Export(fromDate, toDate, FileName);
 
             if(result == ExportResult.Ok)
                 MessageBox.Show("Downloaded!");
@@ -77,6 +91,28 @@ namespace ApplicationReportingDataDownloader
 
             if(saveResult == DialogResult.OK)
                 txtFileName.Text = saveFileDialog.FileName;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string folder = FileName;
+
+            if(FileName == DEFAULT_FILENAME)
+                folder = Directory.GetCurrentDirectory();
+            else
+                folder = Path.GetDirectoryName(FileName);
+
+            Process.Start("explorer.exe", folder);
+        }
+
+        private void txtFileName_TextChanged(object sender, EventArgs e)
+        {
+            var fileName = txtFileName.Text;
+
+            if(Directory.Exists(fileName))
+                fileName = Path.Combine(fileName, DEFAULT_FILENAME);
+
+            FileName = fileName;
         }
     }
 }
